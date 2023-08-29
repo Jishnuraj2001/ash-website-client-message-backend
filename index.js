@@ -1,7 +1,9 @@
 const express =require("express");
 require("dotenv").config();
 const cors=require("cors");
+const moment=require("moment");
 const app=express();
+
 
 const{Connection}=require("./config/db");
 const{Messagemodel}=require("./models/message.model");
@@ -17,7 +19,7 @@ app.post("/message",async(req,res)=>{
     const{name,email,number,message}=req.body;
     try {
         if(req.body){
-            const Message=new Messagemodel({name,email,number,message});
+            const Message=new Messagemodel({name,email,number,message,time:moment().format('LLLL')});
             await Message.save();
             res.status(201).json({"msg":"Thank you for reaching out to us."});
         }else{
@@ -30,8 +32,13 @@ app.post("/message",async(req,res)=>{
 })
 
 app.get("/message",async(req,res)=>{
-    const messages=await Messagemodel.find();
-    res.status(200).json({"msg":"messages fetched successfully","data":messages});
+    try {
+        const messages=await Messagemodel.find();
+        res.status(200).json({"msg":"messages fetched successfully","data":messages});
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).json({"msg":"Unable to fetch the messages."});
+    }
 })
 
 app.listen(process.env.port,async()=>{

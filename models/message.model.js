@@ -5,7 +5,7 @@ const messageSchema=mongoose.Schema({
     email:String,
     number:String,
     message:String,
-    time:{type:Date,default:Date.now()}
+    time:String
 })
 
 const Messagemodel=mongoose.model("message",messageSchema);
