@@ -19,7 +19,7 @@ app.post("/message",async(req,res)=>{
     const{name,email,number,message}=req.body;
     try {
         if(req.body){
-            const Message=new Messagemodel({name,email,number,message,time:moment().format('LLLL')});
+            const Message=new Messagemodel({name,email,number,message,time:moment().format('MMMM Do YYYY, h:mm:ss a')});
             await Message.save();
             res.status(201).json({"msg":"Thank you for reaching out to us."});
         }else{
